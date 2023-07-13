@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Product Display with Cart</title>
+  <style>
+    /* CSS Styles */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .products-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .product-card {
+      width: 250px;
+      background-color: #fff;
+      margin: 10px;
+      padding: 15px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    .product-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+    .product-card h3 {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+    .product-card p {
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+    .add-to-cart {
+      display: flex;
+      justify-content: center;
+    }
+    .add-to-cart button {
+      background-color: #4caf50;
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .cart-container {
+      margin-top: 20px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 10px;
+    }
+    .cart-header {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+    .cart-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .cart-item img {
+      width: 40px;
+      height: 40px;
+      object-fit: cover;
+      border-radius: 5px;
+      margin-right: 10px;
+    }
+    .cart-item-details {
+      flex-grow: 1;
+    }
+    .cart-item h4 {
+      margin: 0;
+    }
+    .cart-item p {
+      margin: 0;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <h1>Product Display with Cart</h1>
+  <div class="products-container" id="products-container"></div>
+
+  <div class="cart-container" id="cart-container">
+    <h2 class="cart-header">Cart</h2>
+    <div id="cart-items"></div>
+  </div>
+
+  <script>
+    // Fetch products from API
+    fetch("https://fakestoreapi.com/products")
+      .then(response => response.json())
+      .then(data => {
+        const productsContainer = document.getElementById("products-container");
+        const cartItems = document.getElementById("cart-items");
+
+        data.forEach(product => {
+          const productCard = document.createElement("div");
+          productCard.classList.add("product-card");
+
+          const image = document.createElement("img");
+          image.src = product.image;
+          productCard.appendChild(image);
+
+          const title = document.createElement("h3");
+          title.textContent = product.title;
+          productCard.appendChild(title);
+
+          const price = document.createElement("p");
+          price.textContent = `$${product.price}`;
+          productCard.appendChild(price);
+
+          const addToCartContainer = document.createElement("div");
+          addToCartContainer.classList.add("add-to-cart");
+
+          const addToCartButton = document.createElement("button");
+          addToCartButton.textContent = "Add to Cart";
+          addToCartButton.addEventListener("click", () => {
+            addToCart(product);
+          });
+          addToCartContainer.appendChild(addToCartButton);
+
+          productCard.appendChild(addToCartContainer);
+
+          productsContainer.appendChild(productCard);
+        });
+
+        function addToCart(product) {
+          const cartItem = document.createElement("div");
+          cartItem.classList.add("cart-item");
+
+          const image = document.createElement("img");
+          image.src = product.image;
+          cartItem.appendChild(image);
+
+          const cartItemDetails = document.createElement("div");
+          cartItemDetails.classList.add("cart-item-details");
+
+          const title = document.createElement("h4");
+          title.textContent = product.title;
+          cartItemDetails.appendChild(title);
+
+          const price = document.createElement("p");
+          price.textContent = `Price: $${product.price}`;
+          cartItemDetails.appendChild(price);
+
+          cartItem.appendChild(cartItemDetails);
+
+          cartItems.appendChild(cartItem);
+        }
+      })
+      .catch(error => {
+        console.error("Error fetching products:", error);
+      });
+  </script>
+</body>
+</html>
